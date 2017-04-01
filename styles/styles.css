@@ -6026,6 +6026,30 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
 .overflow-y-scroll {
   overflow-y: scroll; }
 
+.keyboard-container {
+  height: 100%; }
+  .keyboard-container button {
+    height: 100%;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #aaa;
+    background: #fff;
+    outline: none;
+    font-size: 2em;
+    font-family: monospace; }
+    .keyboard-container button:active {
+      background: #ddd; }
+
+.position-relative {
+  position: relative; }
+
+.absolute-full {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0; }
+
 .vf-stavenote.note-green path {
   fill: #5EE69D;
   stroke: #5EE69D; }

@@ -18,18 +18,13 @@
       </div>
       
     </div>
-    <div class='flex-grow-1 overflow-y-scroll'>
-      <div class='text-center pt-3' if.bind='game.in_game && game.in_round && !game.paused'>
-        <button click.delegate='playKey("c/4")'>c</button>
-        <button click.delegate='playKey("d/4")'>d</button>
-        <button click.delegate='playKey("e/4")'>e</button>
-        <button click.delegate='playKey("f/4")'>f</button>
-        <button click.delegate='playKey("g/4")'>g</button>
-        <button click.delegate='playKey("a/4")'>a</button>
-        <button click.delegate='playKey("b/4")'>b</button>
+    <div class='flex-grow-1 overflow-y-scroll position-relative' style='min-height: 150px' if.bind='game.in_game && game.in_round && (!game.paused || true)'>
+      <div class='absolute-full'>
+        <compose view='./compose-views/keyboard.html'></compose>
       </div>
-
-      <div class='col-12 pt-3' if.bind='!game.in_game && game.round_results.length'>
+    </div>
+    <div class='flex-grow-1 overflow-y-scroll position-relative' if.bind='!game.in_game && game.round_results.length'>
+      <div class='col-12 pt-3'>
         <table class='table table-striped'>
           <thead>
             <tr>

@@ -16,3 +16,33 @@
 .overflow-y-scroll {
   overflow-y: scroll;
 }
+
+.keyboard-container {
+  height: 100%;
+
+  button {
+    height: 100%;
+    border-width: 1px;
+    border-style: solid;
+    border-color: $light-gray;
+    background: $white;
+    outline: none;
+    font-size: 2em;
+    font-family: monospace;
+
+    &:active {
+      background: $lightest-gray;
+    }
+  }
+}
+
+.position-relative {
+  position: relative;
+}
+.absolute-full {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

@@ -98,6 +98,10 @@ export class SelectTheNoteGC {
   playKey(key){
     var StaveNote = this.getNextStaveNote();
 
+    if(this.paused){
+      return;
+    }
+
     if(this.isCorrectKey(key, StaveNote)){
       this.played_notes.push(key);
       $(StaveNote.attrs.el).removeClass('note-red');

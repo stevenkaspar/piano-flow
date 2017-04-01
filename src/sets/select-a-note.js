@@ -1,7 +1,7 @@
 import {SelectTheNoteGC} from '../libs/games/select-the-note-gc';
 
 export class SelectANote {
-
+  
   attached(){
     
     this.game = new SelectTheNoteGC('sheet');
