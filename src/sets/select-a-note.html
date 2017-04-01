@@ -7,13 +7,13 @@
       <div class='text-center'>
         <span class='text-muted'>select the notes</span>
         <div if.bind='!game.in_game'>
-          <button click.delegate='startGame()'>start game</button>
+          <button class='btn btn-link text-success' click.delegate='startGame()'>start game</button>
         </div>
         <div if.bind='game.in_game && !game.paused'>
-          <button click.delegate='pauseGame()'>pause game</button>
+          <button class='btn btn-link text-muted' click.delegate='pauseGame()'>pause game</button>
         </div>
         <div if.bind='game.in_game && game.paused'>
-          <button click.delegate='resumeGame()'>resume game</button>
+          <button class='btn btn-link text-success' click.delegate='resumeGame()'>resume game</button>
         </div>
       </div>
 
