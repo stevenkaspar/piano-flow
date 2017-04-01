@@ -1,0 +1,23 @@
+.main-navigation-links {
+  > a {
+    background: $dark-gray;
+    width: 100%;
+    display: block;
+    margin: 10px 0px;
+    padding: 20px;
+    font-size: 1.25em;
+    font-weight: 200;
+  }
+}
+
+.secondary-navigation-links{ 
+  > a {
+    display: block;
+    font-weight: 200;
+  }
+}
+
+.links-separator {
+  color: $light-gray;
+  font-weight: 200;
+}
