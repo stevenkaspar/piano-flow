@@ -84,6 +84,19 @@
   }
 }
 
+.round-timer-bar-container {
+  position: relative;
+  height: 10px;
+  width: 100%;
+
+  .round-timer-bar {
+    height: 100%;
+    background: $lightest-gray;
+    width: 100%;
+    @include absolute-full();
+  }
+}
+
 .position-relative {
   position: relative;
 }

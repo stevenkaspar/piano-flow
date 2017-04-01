@@ -6073,6 +6073,20 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
         border-left: 0;
         margin-left: -1px; }
 
+.round-timer-bar-container {
+  position: relative;
+  height: 10px;
+  width: 100%; }
+  .round-timer-bar-container .round-timer-bar {
+    height: 100%;
+    background: #ddd;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0; }
+
 .position-relative {
   position: relative; }
 

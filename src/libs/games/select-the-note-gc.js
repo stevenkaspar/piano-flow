@@ -4,19 +4,40 @@ export class SelectTheNoteGC {
   in_game         = false;
   in_round        = false;
   paused          = false;
-  round_time      = 5000;
   bt_round_time   = 1250;
   cur_round_start = null;
   cur_round_end   = null;
   round_results   = [];
   stepTimeout     = null;
+  played_notes    = [];
+  correct_notes   = [];
+  incorrect_notes = [];
+  updateInterval  = null;
+  // below here should be configurable
+  round_time      = 10000;
   num_rounds      = 2;
   possible_notes  = 4;
-  played_notes    = [];
+  // states to track in updateInterval
+  round_time_remaining = this.round_time;
 
   constructor(selector){
     this.sheet = new Sheet(selector);
+    this.updateInterval = setInterval(this.udpate.bind(this), 50);
   }
+
+  udpate(){
+    // run updates that should be calculated every 50ms
+    if(this.in_round && !this.paused){
+      this.round_time_remaining = this.cur_round_end - new Date().getTime();
+    }
+    else if(this.in_round && this.paused){
+      this.round_time_remaining = this.round_time_left;
+    }
+    else {
+      this.round_time_remaining = this.round_time;
+    }
+  }
+
   drawSheet(){
     this.sheet.createSheet();
   }
@@ -68,6 +89,8 @@ export class SelectTheNoteGC {
     this.sheet.clearDrawnNotes();
     this.sheet.addNotes(this.possible_notes);
     this.played_notes    = [];
+    this.correct_notes   = [];
+    this.incorrect_notes = [];
     this.in_round        = true;
     this.cur_round_start = new Date().getTime();
     console.log('start ' + this.cur_round_start);
@@ -79,35 +102,27 @@ export class SelectTheNoteGC {
     console.log('end round');
     clearTimeout(this.stepTimeout);
     this.in_round = false;
-
-    var round_result = {
-      finished: false,
-      num_notes_correct: this.played_notes.length,
-      time_to_finish:    Math.min(5001, this.round_time - (this.cur_round_end - new Date().getTime()))
-    }
-
-    if(round_result.num_notes_correct >= this.possible_notes){
-      round_result.finished = true;
-    }
-
-    this.round_results.push(round_result);
+    
+    this.round_results.push(this.calculateRoundResult());
     
     this.stepTimeout = setTimeout(this.nextRound.bind(this), this.bt_round_time);
       
   }
   playKey(key){
     var StaveNote = this.getNextStaveNote();
+    this.played_notes.push(key);
 
     if(this.paused){
       return;
     }
 
     if(this.isCorrectKey(key, StaveNote)){
-      this.played_notes.push(key);
+      this.correct_notes.push(key);
       $(StaveNote.attrs.el).removeClass('note-red');
       $(StaveNote.attrs.el).addClass('note-green');
     }
     else {
+      this.incorrect_notes.push(key);
       $(StaveNote.attrs.el).removeClass('note-green');
       $(StaveNote.attrs.el).addClass('note-red');
     }
@@ -122,5 +137,24 @@ export class SelectTheNoteGC {
   }
   isCorrectKey(key, StaveNote){
     return StaveNote.getKeys().indexOf(key) > -1;
+  }
+  calculateRoundResult(){
+    
+    var correct   = this.correct_notes.length;
+    var incorrect = this.incorrect_notes.length;
+    var time      = Math.min(
+      this.round_time, 
+      this.round_time - (this.cur_round_end - new Date().getTime())
+      )
+
+    var round_result = {
+      finished:          this.correct_notes.length >= this.possible_notes,
+      score:             (correct * 2) - (incorrect * 2) + parseInt((this.round_time - time) / 1000),
+      num_notes_correct: this.correct_notes.length,
+      time_to_finish:    time
+    }
+    
+    return round_result;
+
   }
 }
