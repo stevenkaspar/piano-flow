@@ -30,7 +30,9 @@ module.exports = {
         "bootstrap",
         "bootstrap/css/bootstrap.css!text",
         "fetch",
-        "jquery"
+        "jquery",
+        "vexflow",
+        "lodash.random"
       ],
       "options": {
         "inject": true,
