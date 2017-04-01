@@ -5992,17 +5992,29 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
   width: 100%;
   display: block;
   margin: 10px 0px;
-  padding: 20px;
+  padding: 4px 20px;
   font-size: 1.25em;
-  font-weight: 200; }
-
-.secondary-navigation-links > a {
-  display: block;
   font-weight: 200; }
 
 .links-separator {
   color: #aaa;
   font-weight: 200; }
+
+.secondary-navigation-links {
+  position: fixed;
+  right: 10px;
+  bottom: 8px; }
+  .secondary-navigation-links.back-home {
+    right: auto;
+    left: 10px; }
+  .secondary-navigation-links > a {
+    display: block;
+    font-weight: 200; }
+
+.sets-nav {
+  position: fixed;
+  top: 4px;
+  left: 4px; }
 
 .vf-stavenote.note-green path {
   fill: #5EE69D;

@@ -1,20 +1,18 @@
 <template>
-  <div class="row">
-    <div class='col-9'>
-      <a href='#/home' if.bind="show_back_home"><i class='fa fa-arrow-left'></i>&nbsp;home</a>
-    </div>
-    <div class='col-3'>
-      <div class='secondary-navigation-links text-right'>
-        <a href='#/about'>
-          about
-        </a>
-        <a href='#/settings'>
-          settings
-        </a>
-        <a href='#'>
-          review
-        </a>
-      </div>
-    </div>
+  <div class='secondary-navigation-links back-home' if.bind='show_back_home'>
+    <a href='#/'>
+      <i class='fa fa-home'></i>
+    </a>
+  </div>
+  <div class='secondary-navigation-links text-right'>
+    <a href='#/about'>
+      about
+    </a>
+    <a href='#/settings'>
+      settings
+    </a>
+    <a href='#'>
+      review
+    </a>
   </div>
 </template>

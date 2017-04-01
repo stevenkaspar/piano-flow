@@ -1,4 +1,5 @@
 <template>
+  <compose class='sets-nav' view='./compose-views/sets-nav.html'></compose>
   <div class='row'>
     <div class='col-12'>
       <div id="sheet"></div>
@@ -21,7 +22,7 @@
     </div>
   </div>
   <div class='row'>
-    <div class='col-12 text-center pt-5' if.bind='game.in_game && game.in_round && !game.paused'>
+    <div class='col-12 text-center pt-3' if.bind='game.in_game && game.in_round && !game.paused'>
       <button click.delegate='playKey("c/4")'>c</button>
       <button click.delegate='playKey("d/4")'>d</button>
       <button click.delegate='playKey("e/4")'>e</button>
@@ -30,7 +31,7 @@
       <button click.delegate='playKey("a/4")'>a</button>
       <button click.delegate='playKey("b/4")'>b</button>
     </div>
-    <div class='col-12 pt-5' if.bind='!game.in_game && game.round_results.length'>
+    <div class='col-12 pt-3' if.bind='!game.in_game && game.round_results.length'>
       <table class='table table-striped'>
         <thead>
           <tr>

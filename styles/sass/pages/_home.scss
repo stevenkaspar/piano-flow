@@ -4,15 +4,8 @@
     width: 100%;
     display: block;
     margin: 10px 0px;
-    padding: 20px;
+    padding: 4px 20px;
     font-size: 1.25em;
-    font-weight: 200;
-  }
-}
-
-.secondary-navigation-links{ 
-  > a {
-    display: block;
     font-weight: 200;
   }
 }
@@ -20,4 +13,21 @@
 .links-separator {
   color: $light-gray;
   font-weight: 200;
+}
+
+.secondary-navigation-links{ 
+  position: fixed;
+  right: 10px;
+  bottom: 8px;
+
+  &.back-home {
+    right: auto;
+    left: 10px;
+  }
+
+
+  > a {
+    display: block;
+    font-weight: 200;
+  }
 }
