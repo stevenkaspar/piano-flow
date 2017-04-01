@@ -6031,17 +6031,42 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
 
 .keyboard-container {
   height: 100%; }
-  .keyboard-container button {
-    height: 100%;
-    border-width: 1px;
-    border-style: solid;
-    border-color: #aaa;
-    background: #fff;
-    outline: none;
-    font-size: 2em;
-    font-family: monospace; }
-    .keyboard-container button:active {
-      background: #ddd; }
+  .keyboard-container div {
+    position: relative; }
+    .keyboard-container div button {
+      font-family: monospace; }
+    .keyboard-container div button.white-key {
+      height: 100%;
+      width: 100%;
+      border-width: 1px;
+      border-style: solid;
+      border-color: #aaa;
+      background: #fff;
+      outline: none;
+      font-size: 2em;
+      padding-top: 2em; }
+      .keyboard-container div button.white-key:active {
+        background: #ddd; }
+    .keyboard-container div button.black-key {
+      background: #222;
+      color: #666;
+      position: absolute;
+      top: 0;
+      height: 50%;
+      max-height: 200px;
+      border-width: 1px;
+      border-style: solid;
+      border-color: #aaa;
+      width: 50%;
+      z-index: 1; }
+      .keyboard-container div button.black-key.black-key-right {
+        right: -25%;
+        border-right: 0;
+        margin-right: -1px; }
+      .keyboard-container div button.black-key.black-key-left {
+        left: 0;
+        border-left: 0;
+        margin-left: -1px; }
 
 .position-relative {
   position: relative; }

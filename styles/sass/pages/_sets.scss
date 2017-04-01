@@ -23,18 +23,54 @@
 .keyboard-container {
   height: 100%;
 
-  button {
-    height: 100%;
-    border-width: 1px;
-    border-style: solid;
-    border-color: $light-gray;
-    background: $white;
-    outline: none;
-    font-size: 2em;
-    font-family: monospace;
+  div {
 
-    &:active {
-      background: $lightest-gray;
+    position: relative;
+
+    button {
+      font-family: monospace;
+    }
+
+    button.white-key {
+      height: 100%;
+      width: 100%;
+      border-width: 1px;
+      border-style: solid;
+      border-color: $light-gray;
+      background: $white;
+      outline: none;
+      font-size: 2em;
+      padding-top: 2em;
+
+      &:active {
+        background: $lightest-gray;
+      }
+    }
+    $black-key-width-per: 50%;
+    button.black-key {
+      background: $black;
+      color: $gray;
+      position: absolute;
+      top: 0;
+      height: 50%;
+      max-height: 200px;
+      border-width: 1px;
+      border-style: solid;
+      border-color: $light-gray;
+      width: $black-key-width-per;
+      z-index: 1;
+
+      &.black-key-right {
+        right: -($black-key-width-per/2);
+        border-right: 0;
+        margin-right: -1px;
+      }
+      &.black-key-left {
+        left: 0;
+        border-left: 0;
+        margin-left: -1px;
+      }
+
     }
   }
 }
