@@ -6026,6 +6026,9 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
 .overflow-y-scroll {
   overflow-y: scroll; }
 
+.overflow-y-auto {
+  overflow-y: auto; }
+
 .keyboard-container {
   height: 100%; }
   .keyboard-container button {

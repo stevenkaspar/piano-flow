@@ -18,12 +18,12 @@
       </div>
       
     </div>
-    <div class='flex-grow-1 overflow-y-scroll position-relative' style='min-height: 150px' if.bind='game.in_game && game.in_round && (!game.paused || true)'>
+    <div class='flex-grow-1 overflow-y-auto position-relative' style='min-height: 150px' if.bind='game.in_game && game.in_round && (!game.paused || true)'>
       <div class='absolute-full'>
         <compose view='./compose-views/keyboard.html'></compose>
       </div>
     </div>
-    <div class='flex-grow-1 overflow-y-scroll position-relative' if.bind='!game.in_game && game.round_results.length'>
+    <div class='flex-grow-1 overflow-y-auto position-relative' if.bind='!game.in_game && game.round_results.length'>
       <div class='col-12 pt-3'>
         <table class='table table-striped'>
           <thead>
