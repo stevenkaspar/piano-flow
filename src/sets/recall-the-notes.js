@@ -1,10 +1,10 @@
-import {PlayTheNotesGC} from '../libs/games/play-the-notes-gc';
+import {RecallTheNotesGC} from '../libs/games/recall-the-notes-gc';
 
-export class PlayTheNotes {
+export class RecallTheNotes {
 
   attached(){
     
-    this.game = new PlayTheNotesGC('sheet');
+    this.game = new RecallTheNotesGC('sheet');
 
     this.game.drawSheet();
 

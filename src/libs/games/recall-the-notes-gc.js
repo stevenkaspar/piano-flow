@@ -1,6 +1,6 @@
 import {Sheet} from '../sheet/index';
 
-export class PlayTheNotesGC {
+export class RecallTheNotesGC {
   // configuration items
   sec_per_note    = 1.5; // seconds to show sheet for per note
   num_rounds      = 2;
