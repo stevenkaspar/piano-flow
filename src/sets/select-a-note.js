@@ -21,7 +21,7 @@ export class SelectANote {
   }
 
   playKey(key){
-    navigator.vibrate(400);
+    navigator.vibrate(50);
     this.game.playKey(key);
   }
 }
