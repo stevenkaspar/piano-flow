@@ -1,22 +1,23 @@
 {
-  "name": "aurelia-skeleton-navigation",
-  "version": "1.1.2",
-  "description": "A starter kit for building a standard navigation-style app with Aurelia.",
+  "name": "piano-flow-app",
+  "version": "0.0.4",
+  "description": "Piano learning app",
   "keywords": [
-    "aurelia",
-    "navigation",
-    "skeleton"
+    "piano",
+    "flow",
+    "sheet",
+    "music"
   ],
-  "homepage": "http://aurelia.io",
+  "homepage": "http://pianoflow.site",
   "bugs": {
-    "url": "https://github.com/aurelia/skeleton-navigation/issues"
+    "url": "https://github.com/stevenkaspar/piano-flow/issues"
   },
   "license": "CC0-1.0",
-  "author": "Rob Eisenberg <rob@bluespire.com> (http://robeisenberg.com/)",
+  "author": "Steven Kaspar <srkaspar@gmail.com> (http://robeisenberg.com/)",
   "main": "dist/main.js",
   "repository": {
     "type": "git",
-    "url": "http://github.com/aurelia/skeleton-navigation"
+    "url": "http://github.com/stevenkaspar/piano-flow"
   },
   "scripts": {
     "test": "gulp test",
