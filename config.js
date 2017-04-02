@@ -232,6 +232,9 @@ System.config({
     "blur-image.js": [
       "aurelia-framework"
     ],
+    "libs/games/play-the-notes-gc.js": [
+      "../sheet/index"
+    ],
     "libs/games/select-the-note-gc.js": [
       "../sheet/index"
     ],
@@ -241,6 +244,9 @@ System.config({
     ],
     "main.js": [
       "bootstrap"
+    ],
+    "sets/play-the-notes.js": [
+      "../libs/games/play-the-notes-gc"
     ],
     "sets/select-a-note.js": [
       "../libs/games/select-the-note-gc"
@@ -262,6 +268,7 @@ System.config({
       "child-router.js",
       "home.html!github:systemjs/plugin-text@0.0.8.js",
       "home.js",
+      "libs/games/play-the-notes-gc.js",
       "libs/games/select-the-note-gc.js",
       "libs/sheet/index.js",
       "main.js",
@@ -269,6 +276,8 @@ System.config({
       "nav-bar.html!github:systemjs/plugin-text@0.0.8.js",
       "sets/compose-views/keyboard.html!github:systemjs/plugin-text@0.0.8.js",
       "sets/compose-views/sets-nav.html!github:systemjs/plugin-text@0.0.8.js",
+      "sets/play-the-notes.html!github:systemjs/plugin-text@0.0.8.js",
+      "sets/play-the-notes.js",
       "sets/select-a-note.html!github:systemjs/plugin-text@0.0.8.js",
       "sets/select-a-note.js",
       "sets/sets-index.html!github:systemjs/plugin-text@0.0.8.js",

@@ -6073,6 +6073,15 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
         border-left: 0;
         margin-left: -1px; }
 
+.absolute-full-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #444;
+  z-index: 2; }
+
 .round-timer-bar-container {
   position: relative;
   height: 10px;

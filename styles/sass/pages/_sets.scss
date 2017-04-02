@@ -84,6 +84,12 @@
   }
 }
 
+.absolute-full-cover {
+  @include absolute-full();
+  background: $dark-gray;
+  z-index: 2;
+}
+
 .round-timer-bar-container {
   position: relative;
   height: 10px;

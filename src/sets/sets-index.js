@@ -8,6 +8,13 @@ export class SetsIndex {
         moduleId: './select-a-note',      
         nav:      true, 
         title:    'select a note' 
+      },
+      { 
+        route:    ['', 'play-the-notes'],    
+        name:     'play-the-notes',      
+        moduleId: './play-the-notes',      
+        nav:      true, 
+        title:    'play-the notes' 
       }
     ]);
 
