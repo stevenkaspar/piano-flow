@@ -3,18 +3,18 @@ export class SetsIndex {
     config.title = 'Sets';
     config.map([
       { 
-        route:    ['', 'select-a-note'],    
-        name:     'select-a-note',      
-        moduleId: './select-a-note',      
+        route:    ['', 'play-the-notes'],    
+        name:     'play-the-notes',      
+        moduleId: './play-the-notes',      
         nav:      true, 
-        title:    'select a note' 
+        title:    'play the notes' 
       },
       { 
         route:    ['', 'recall-the-notes'],    
         name:     'recall-the-notes',      
         moduleId: './recall-the-notes',      
         nav:      true, 
-        title:    'recall-the notes' 
+        title:    'recall the notes' 
       }
     ]);
 

@@ -1,6 +1,6 @@
 import {Sheet} from '../sheet/index';
 
-export class SelectTheNoteGC {
+export class PlayTheNotesGC {
   in_game         = false;
   in_round        = false;
   paused          = false;

@@ -1,10 +1,10 @@
-import {SelectTheNoteGC} from '../libs/games/select-the-note-gc';
+import {PlayTheNotesGC} from '../libs/games/play-the-notes-gc';
 
-export class SelectANote {
+export class PlayTheNotes {
 
   attached(){
     
-    this.game = new SelectTheNoteGC('sheet');
+    this.game = new PlayTheNotesGC('sheet');
 
     this.game.drawSheet();
 
