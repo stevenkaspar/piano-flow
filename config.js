@@ -228,6 +228,29 @@ System.config({
       "indexof": "npm:indexof@0.0.1"
     }
   },
+  depCache: {
+    "blur-image.js": [
+      "aurelia-framework"
+    ],
+    "libs/games/select-the-note-gc.js": [
+      "../sheet/index"
+    ],
+    "libs/sheet/index.js": [
+      "vexflow",
+      "lodash.random"
+    ],
+    "main.js": [
+      "bootstrap"
+    ],
+    "sets/select-a-note.js": [
+      "../libs/games/select-the-note-gc"
+    ],
+    "users.js": [
+      "aurelia-framework",
+      "aurelia-fetch-client",
+      "fetch"
+    ]
+  },
   bundles: {
     "app-build.js": [
       "about.html!github:systemjs/plugin-text@0.0.8.js",
@@ -354,29 +377,6 @@ System.config({
       "npm:process@0.11.9/browser.js",
       "npm:vexflow@1.2.83.js",
       "npm:vexflow@1.2.83/releases/vexflow-debug.js"
-    ]
-  },
-  depCache: {
-    "blur-image.js": [
-      "aurelia-framework"
-    ],
-    "libs/games/select-the-note-gc.js": [
-      "../sheet/index"
-    ],
-    "libs/sheet/index.js": [
-      "vexflow",
-      "lodash.random"
-    ],
-    "main.js": [
-      "bootstrap"
-    ],
-    "sets/select-a-note.js": [
-      "../libs/games/select-the-note-gc"
-    ],
-    "users.js": [
-      "aurelia-framework",
-      "aurelia-fetch-client",
-      "fetch"
     ]
   }
 });

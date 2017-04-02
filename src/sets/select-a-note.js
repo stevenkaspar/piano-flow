@@ -20,7 +20,9 @@ export class SelectANote {
     this.game.resumeGame();
   }
 
-  playKey(key){
+  playKey(event, key){
+    event.stopPropagation();
+    event.preventDefault();
     navigator.vibrate(50);
     this.game.playKey(key);
   }
