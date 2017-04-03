@@ -1,6 +1,15 @@
+import {inject} from 'aurelia-framework';
+import {EventAggregator} from 'aurelia-event-aggregator';
 import {RecallTheNotesGC} from '../libs/games/recall-the-notes-gc';
 
+@inject(EventAggregator)
 export class RecallTheNotes {
+
+  constructor(ea){
+    this.ea = ea;
+
+    this.ea.subscribe('play-key', this.playKeySubscriber.bind(this));
+  }
 
   attached(){
     
@@ -19,11 +28,10 @@ export class RecallTheNotes {
   resumeGame(){
     this.game.resumeGame();
   }
+  
+  playKeySubscriber(key_array){
 
-  playKey(event, key){
-    event.stopPropagation();
-    event.preventDefault();
-    navigator.vibrate(50);
-    this.game.playKey(key);
+    this.game.playKey(key_array[0]);
+
   }
 }

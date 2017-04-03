@@ -32,7 +32,8 @@ module.exports = {
         "fetch",
         "jquery",
         "vexflow",
-        "lodash.random"
+        "lodash.random",
+        "aurelia-event-aggregator"
       ],
       "options": {
         "inject": true,

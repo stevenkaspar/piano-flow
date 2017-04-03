@@ -1,6 +1,15 @@
+import {inject} from 'aurelia-framework';
+import {EventAggregator} from 'aurelia-event-aggregator';
 import {PlayTheNotesGC} from '../libs/games/play-the-notes-gc';
 
+@inject(EventAggregator)
 export class PlayTheNotes {
+
+  constructor(ea){
+    this.ea = ea;
+
+    this.ea.subscribe('play-key', this.playKeySubscriber.bind(this));
+  }
 
   attached(){
     
@@ -20,10 +29,9 @@ export class PlayTheNotes {
     this.game.resumeGame();
   }
 
-  playKey(event, key){
-    event.stopPropagation();
-    event.preventDefault();
-    navigator.vibrate(50);
-    this.game.playKey(key);
+  playKeySubscriber(key_array){
+
+    this.game.playKey(key_array[0]);
+
   }
 }
