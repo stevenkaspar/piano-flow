@@ -4,11 +4,11 @@ import {RecallTheNotesGC} from '../libs/games/recall-the-notes-gc';
 
 @inject(EventAggregator)
 export class RecallTheNotes {
+  instructions = 'remember the notes and play them back';
+  subscribers = [];
 
   constructor(ea){
     this.ea = ea;
-
-    this.ea.subscribe('play-key', this.playKeySubscriber.bind(this));
   }
 
   attached(){
@@ -17,6 +17,22 @@ export class RecallTheNotes {
 
     this.game.drawSheet();
 
+    this.listen(true);
+  }
+
+  detached(){
+    this.listen(false);
+  }
+
+  listen(on_off){
+    if(on_off){
+      this.subscribers.push(this.ea.subscribe('play-key', this.playKeySubscriber.bind(this)));
+    }
+    else {
+      for(let subscriber of this.subscribers){
+        subscriber.dispose();
+      }
+    }
   }
 
   startGame(){
