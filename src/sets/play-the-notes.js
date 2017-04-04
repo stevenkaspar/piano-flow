@@ -1,6 +1,6 @@
 import {inject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {PlayTheNotesGC} from '../libs/games/play-the-notes-gc';
+import {PlayTheNotesGC} from './game-controllers/play-the-notes-gc';
 
 @inject(EventAggregator)
 export class PlayTheNotes {

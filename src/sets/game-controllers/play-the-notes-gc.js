@@ -1,4 +1,4 @@
-import {Sheet} from '../sheet/index';
+import {Sheet} from '../../libs/sheet/index';
 
 export class PlayTheNotesGC {
   in_game         = false;
