@@ -3,6 +3,13 @@ export class SetsIndex {
     config.title = 'Sets';
     config.map([
       { 
+        route:    ['', 'piano-flow'],    
+        name:     'piano-flow',      
+        moduleId: './piano-flow',      
+        nav:      true, 
+        title:    'piano flow' 
+      },
+      { 
         route:    ['', 'play-the-notes'],    
         name:     'play-the-notes',      
         moduleId: './play-the-notes',      

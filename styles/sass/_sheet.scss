@@ -6,3 +6,12 @@
     fill:   $red;
     stroke: $red;
 }
+
+#sheet {
+    svg {
+        width: 604px;
+        margin: 0 auto;
+        display: block;
+        max-width: 100%;
+    }
+}

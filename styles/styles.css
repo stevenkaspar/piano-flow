@@ -6114,6 +6114,12 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
   fill: #E65E5E;
   stroke: #E65E5E; }
 
+#sheet svg {
+  width: 604px;
+  margin: 0 auto;
+  display: block;
+  max-width: 100%; }
+
 html, body {
   height: 100%; }
 
