@@ -172,7 +172,7 @@ export class RecallTheNotesGC {
   }
   getNextStaveNote(){
     var index = this.played_notes.length;
-    return this.sheet.getDrawnNotes()[index];
+    return this.sheet.getDrawnNotes()[index].StaveNote;
   }
   isCorrectKey(key, StaveNote){
     return StaveNote.getKeys().indexOf(key) > -1;
