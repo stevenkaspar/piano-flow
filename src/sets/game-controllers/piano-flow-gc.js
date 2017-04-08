@@ -9,15 +9,15 @@ export class PianoFlowGC {
   correct_notes   = [];
   incorrect_notes = [];
   updateInterval  = null;
-  flow_speed      = 120;
-  new_note_interval_ms = 2000;
+  flow_speed           = 120;
   cur_add_new_note_interval_ms = 0;
   update_interval_ms = 50;
-
+  lowest_level_time = 4000;
+  total_count_of_last_level_change = 0;
   // below here should be configurable
-  // ** placeholder
+  level = 10;
   // states to track in updateInterval
-  // ** placeholder
+  new_note_interval_ms = this.lowest_level_time / this.level;
 
   constructor(selector){
     this.sheet = new Sheet(selector);
@@ -37,12 +37,48 @@ export class PianoFlowGC {
     
     if(this.cur_add_new_note_interval_ms <= 0){
       this.addNote();
+      this.calculateLevel();
       this.cur_add_new_note_interval_ms = this.new_note_interval_ms;
     }
     else {
       this.cur_add_new_note_interval_ms += -this.update_interval_ms;
     }
     
+  }
+  getNewNoteIntervalMs(){
+    return this.lowest_level_time / this.level;
+  }
+
+  calculateLevel(){
+    let correct_count   = this.correct_notes.length;
+    let incorrect_count = this.incorrect_notes.length;
+    let total_count     = correct_count + incorrect_count;
+    let total_shown      = this.sheet.getDrawnNotes();
+
+    let percentage_incorrect = incorrect_count / total_count;
+
+    if(total_count < 10){
+      return;
+    }
+
+    var new_level = this.level;
+
+    if(total_count === 0){
+      return;
+    }
+    else if(percentage_incorrect > .08){
+      --new_level;
+    }
+    else if((1 - percentage_incorrect) > .98){
+      ++new_level;
+    }
+
+    if(new_level !== this.level && ((total_count - this.total_count_of_last_level_change) > (10 * this.level))){
+      this.total_count_of_last_level_change = total_count;
+      this.level = new_level;
+    }
+
+    this.new_note_interval_ms = this.lowest_level_time / this.level;
   }
 
   drawSheet(){
