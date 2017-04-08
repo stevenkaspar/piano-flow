@@ -1,5 +1,10 @@
 <template>
   <compose class='sets-nav' view='./compose-views/sets-nav.html'></compose>
+  <div class='debug-stat-line'>
+    <span>lvl: ${game.level}</span>
+    &nbsp;
+    <span class='text-success'>%: ${((game.correct_notes.length / game.played_notes.length)*100).toFixed(1)}</span>
+  </div>
   <div class='d-flex flex-column height-100'>
     <div class='flex-grow-1'>
       <div id="sheet"></div>

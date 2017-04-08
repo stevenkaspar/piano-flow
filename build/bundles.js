@@ -33,7 +33,9 @@ module.exports = {
         "jquery",
         "vexflow",
         "lodash.random",
-        "aurelia-event-aggregator"
+        "aurelia-event-aggregator",
+        "lodash.uniqueid",
+        "lodash.find"
       ],
       "options": {
         "inject": true,

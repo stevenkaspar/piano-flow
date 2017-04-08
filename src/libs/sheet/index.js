@@ -1,11 +1,13 @@
-import Vex from 'vexflow';
+import Vex    from 'vexflow';
 import random from 'lodash.random';
+import uid    from 'lodash.uniqueid';
 
 class Note {
   
+  _id       = uid('note_');
   VF        = Vex.Flow;
   StaveNote = null;
-  removed = false;
+  removed   = false;
   
   constructor(options){
 
@@ -183,22 +185,29 @@ class Note {
 }
 
 export class Sheet {
-  context  = null;
-  stave    = null;
-  width    = 600;
-  height   = 100;
+  context      = null;
+  stave        = null;
+  width        = 600;
+  height       = 100;
+  remove_point = 0;
   VF       = Vex.Flow;
   drawn_notes  = [];
   flowInterval = null;
 
-  constructor(selector, width, height){
-    this.selector = selector;
-    if(width){
-      this.width = width;      
+  constructor(options){
+
+    this.selector = options.selector;
+
+    if(options.width){
+      this.width = options.width;      
     }
-    if(height){
-      this.height = height;
+    if(options.height){
+      this.height = options.height;
     }
+    if(options.remove_point){
+      this.remove_point = options.remove_point;
+    }
+    this.noteRemovedCb = (typeof options.noteRemoved === 'function')?options.noteRemoved:()=>{};
   }
 
   dispose(){
@@ -294,8 +303,9 @@ export class Sheet {
 
       note.moveXPixels(-1);
     
-      if(note.isXOrLessFromLeft()){
+      if(note.isXOrLessFromLeft(this.remove_point)){
         note.remove();
+        this.noteRemovedCb(note);
       }
     }
 

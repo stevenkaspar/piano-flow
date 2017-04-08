@@ -6106,6 +6106,12 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
   right: 0;
   bottom: 0; }
 
+.debug-stat-line {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 1000; }
+
 .vf-stavenote.note-green path {
   fill: #5EE69D;
   stroke: #5EE69D; }
