@@ -68,7 +68,6 @@ class Note {
     // remove line that go though the stave
     bar.remove();
     note.remove();
-    console.log('remove');
     this.removed = true;
     return this;
   }
@@ -117,6 +116,23 @@ class Note {
     return this;
   }
 
+  style(color){
+    var elem = this.getElem(true);
+    if(color === 'green'){
+      elem.removeClass('note-red');
+      elem.addClass('note-green');
+    }
+    else if(color === 'red') {
+      elem.removeClass('note-green');
+      elem.addClass('note-red');
+    }
+    else {
+      elem.removeClass('note-green');
+      elem.removeClass('note-red');
+    }
+    return this;
+  }
+
   
   // functions that don't return this
   /**
@@ -158,19 +174,41 @@ class Note {
     if(isNaN(x)){
       x = 0;
     }
-    let node = this.getElem();
-    let svg = this.getSvg();
-    let pixels_from_left = node.offset().left - svg.offset().left;
+    
+    let pixels_from_left = this.getXY().x;
+    
     if(pixels_from_left < x){
       return true;
     }
     return false;
   }
+
+  getXY(node){
+    if(this.removed){
+      return {
+        x: -9999,
+        y: -9999
+      }
+    }
+    if(!node){
+      node = this.getElem();
+    }
+    let svg = this.getSvg();
+    let xy = {
+      x: node.offset().left - svg.offset().left, 
+      y: node.offset().top  - svg.offset().top,
+    };
+    return xy;
+  }
+
   /**
    * gets the {x, y} of transform=translate(x,y)
    * @param {HTMLElement} html_element 
    */
   getTransformXY(html_element){
+    if(!html_element){
+      html_element = this.getElem()[0];
+    }
     var xforms = html_element.getAttribute('transform');
     if(xforms === null){
       return {x: 0, y: 0};
@@ -190,7 +228,7 @@ export class Sheet {
   width        = 600;
   height       = 100;
   remove_point = 0;
-  VF       = Vex.Flow;
+  VF           = Vex.Flow;
   drawn_notes  = [];
   flowInterval = null;
 
@@ -349,5 +387,13 @@ export class Sheet {
       clef:     clef,
       duration: duration
     })
+  }
+
+  addVerticalLine(x){
+    let line = document.createElementNS('http://www.w3.org/2000/svg', 'path');  
+    line.setAttributeNS(null, 'd', `M${x},40L${x},${this.height}`);  
+    line.setAttributeNS(null, 'stroke', `rgba(94, 230, 157, .7)`);  
+    line.setAttributeNS(null, 'stroke-width', `10`); 
+    this.context.svg.appendChild(line);
   }
 }

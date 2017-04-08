@@ -8,15 +8,13 @@ export class PianoFlowGC {
   stepTimeout     = null;
   /** Note[] */
   played_notes    = [];
-  /** Note[] */ 
-  correct_notes   = [];
-  /** Note[] */  
-  incorrect_notes = [];
+  performance_level = 100;
   updateInterval  = null;
-  flow_speed           = 120;
+  target_offset   = 115;
+  flow_speed      = 120;
   cur_add_new_note_interval_ms = 0;
-  update_interval_ms = 50;
-  lowest_level_time = 4000;
+  update_interval_ms           = 50;
+  lowest_level_time            = 4000;
   total_count_of_last_level_change = 0;
   // below here should be configurable
   level = 3;
@@ -26,8 +24,7 @@ export class PianoFlowGC {
   constructor(selector){
     this.sheet = new Sheet({
       selector:     selector,
-      remove_point: 100,
-      noteRemoved:  this.noteRemovedBySheet.bind(this)
+      remove_point: this.target_offset - 30
     });
     this.updateInterval = setInterval(this.udpate.bind(this), this.update_interval_ms);
   }
@@ -43,6 +40,23 @@ export class PianoFlowGC {
       return;
     }
     
+    if(this.performance_level < 50){
+      this.endGame();
+      return;
+    }
+
+    // check state of the next note
+    var Note      = this.getNextNote();
+    if(Note){
+      var note_time = this.getTimeOfNextNote();
+      if(note_time === 2 && !this.noteHasBeenPlayed(Note)){
+        Note.style('red');
+        this.played_notes.push(Note);
+        this.performance_level += -3;
+      }
+    }   
+
+    // check level and see if we should add another note
     if(this.cur_add_new_note_interval_ms <= 0){
       this.addNote();
       this.calculateLevel();
@@ -50,55 +64,41 @@ export class PianoFlowGC {
     }
     else {
       this.cur_add_new_note_interval_ms += -this.update_interval_ms;
-    }
-    
+    } 
   }
   getNewNoteIntervalMs(){
     return this.lowest_level_time / this.level;
   }
 
   calculateLevel(){
-    let correct_count   = this.correct_notes.length;
-    let incorrect_count = this.incorrect_notes.length;
-    let total_count     = correct_count + incorrect_count;
-    let total_shown      = this.sheet.getDrawnNotes();
-
-    let percentage_incorrect = incorrect_count / total_count;
-
-    if(total_count < 10){
-      return;
-    }
-
+    let total_notes_possible = this.played_notes.length;
+    
     var new_level = this.level;
 
-    if(total_count === 0){
-      return;
+    if(this.performance_level > 97){
+      new_level++;
     }
-    else if(percentage_incorrect > .02){
-      --new_level;
-    }
-    else if((1 - percentage_incorrect) > .97){
-      ++new_level;
+    else if(this.performance_level < 95) {
+      new_level--;
     }
 
-    if(new_level !== this.level && ((total_count - this.total_count_of_last_level_change) > (1 * this.level))){
-      this.total_count_of_last_level_change = total_count;
-      this.level = Math.max(new_level, 1);
+    if(new_level !== this.level && ((total_notes_possible - this.total_count_of_last_level_change) > (1 * this.level))){
+      this.total_count_of_last_level_change = total_notes_possible;
+      new_level  = Math.min(25, new_level);
+      this.level = Math.max(1, new_level);
+      this.new_note_interval_ms = this.lowest_level_time / this.level;
     }
-
-    this.new_note_interval_ms = this.lowest_level_time / this.level;
   }
 
   drawSheet(){
     this.sheet.createSheet();
+    this.sheet.addVerticalLine(this.target_offset);
   }
   startGame(){
     console.log('start');
     this.in_game       = true;
     this.sheet.clearDrawnNotes();
     this.played_notes    = [];
-    this.correct_notes   = [];
-    this.incorrect_notes = [];
     this.sheet.flowLeft(this.flow_speed);
     this.cur_add_new_note_interval_ms = this.new_note_interval_ms;
   }
@@ -134,36 +134,42 @@ export class PianoFlowGC {
       new_note.setOffsetX(500);
     }
   }
-  noteRemovedBySheet(Note){
-    
-    var note_removed = find(this.played_notes, n => n._id ===  Note._id);
-
-    if(!note_removed){
-      this.played_notes.push(Note);
-      this.incorrect_notes.push(Note);
-    }
-
-  }
   playKey(key){
 
     if(this.paused){
       return;
     }
-    var Note = this.getNextNote();
-    this.played_notes.push(Note);
+    let Note    = this.getNextNote();
+    let note_xy = Note.getXY();
+    let time = this.getTimeOfNextNote();
+    // if note is in timezone
+    if(time === 0){
 
-    if(this.isCorrectKey(key, Note)){
-      this.correct_notes.push(Note);
-      $(Note.StaveNote.attrs.el).removeClass('note-red');
-      $(Note.StaveNote.attrs.el).addClass('note-green');
+      // add to played notes
+      this.played_notes.push(Note);
+
+      // if correct
+      if(this.isCorrectKey(key, Note)){
+        // increment performance indicator
+        Note.style('green');
+        this.performance_level += 1;
+      }
+      // else
+      else {
+        // decrement performance indicator
+        Note.style('red');
+        this.performance_level += -1;
+      }
     }
+    // else
     else {
-      this.incorrect_notes.push(Note);
-      $(Note.StaveNote.attrs.el).removeClass('note-green');
-      $(Note.StaveNote.attrs.el).addClass('note-red');
+      // decrement performance indicator
+      this.performance_level += -2;
     }
 
-    // check if end of game
+    // force between 1 and 100
+    this.performance_level = Math.min(100, this.performance_level);
+    this.performance_level = Math.max(1,   this.performance_level);
   }
 
   getNextNote(){
@@ -173,6 +179,39 @@ export class PianoFlowGC {
 
   isCorrectKey(key, Note){
     return Note.StaveNote.getKeys().indexOf(key) > -1;
+  }
+
+  /**
+   * returns 
+   * 
+   * - **0** if **on time** to be played
+   * - **1** if it is **not time** yet
+   * - **2** if it is too **late**
+   */
+  getTimeOfNextNote(){
+    let Note    = this.getNextNote();
+    let note_xy = Note.getXY();
+
+    // if note note passed
+    let not_passed = note_xy.x > this.target_offset - 14;
+    let been_here  = note_xy.x < this.target_offset + 10;
+
+    // been here and passed - too early
+    if(!been_here){
+      return 1;
+    }
+    // been here and passed - too late
+    else if(!not_passed){
+      return 2;
+    }
+    // it is here and not passed - on time
+    else {
+      return 0;
+    }
+  }
+
+  noteHasBeenPlayed(Note){
+    return find(this.played_notes, n => n._id === Note._id);
   }
   
 }
