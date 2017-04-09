@@ -237,50 +237,6 @@ System.config({
       "indexof": "npm:indexof@0.0.1"
     }
   },
-  depCache: {
-    "libs/sheet/index.js": [
-      "vexflow",
-      "lodash.random",
-      "lodash.uniqueid"
-    ],
-    "main.js": [
-      "bootstrap"
-    ],
-    "sets/compose-views/keyboard.js": [
-      "aurelia-framework",
-      "aurelia-event-aggregator"
-    ],
-    "sets/game-controllers/piano-flow-gc.js": [
-      "../../libs/sheet/index",
-      "lodash.find"
-    ],
-    "sets/game-controllers/play-the-notes-gc.js": [
-      "../../libs/sheet/index"
-    ],
-    "sets/game-controllers/recall-the-notes-gc.js": [
-      "../../libs/sheet/index"
-    ],
-    "sets/piano-flow.js": [
-      "aurelia-framework",
-      "aurelia-event-aggregator",
-      "./game-controllers/piano-flow-gc"
-    ],
-    "sets/play-the-notes.js": [
-      "aurelia-framework",
-      "aurelia-event-aggregator",
-      "./game-controllers/play-the-notes-gc"
-    ],
-    "sets/recall-the-notes.js": [
-      "aurelia-framework",
-      "aurelia-event-aggregator",
-      "./game-controllers/recall-the-notes-gc"
-    ],
-    "users.js": [
-      "aurelia-framework",
-      "aurelia-fetch-client",
-      "fetch"
-    ]
-  },
   bundles: {
     "app-build.js": [
       "about.html!github:systemjs/plugin-text@0.0.8.js",
@@ -415,6 +371,50 @@ System.config({
       "npm:process@0.11.9/browser.js",
       "npm:vexflow@1.2.83.js",
       "npm:vexflow@1.2.83/releases/vexflow-debug.js"
+    ]
+  },
+  depCache: {
+    "libs/sheet/index.js": [
+      "vexflow",
+      "lodash.random",
+      "lodash.uniqueid"
+    ],
+    "main.js": [
+      "bootstrap"
+    ],
+    "sets/compose-views/keyboard.js": [
+      "aurelia-framework",
+      "aurelia-event-aggregator"
+    ],
+    "sets/game-controllers/piano-flow-gc.js": [
+      "../../libs/sheet/index",
+      "lodash.find"
+    ],
+    "sets/game-controllers/play-the-notes-gc.js": [
+      "../../libs/sheet/index"
+    ],
+    "sets/game-controllers/recall-the-notes-gc.js": [
+      "../../libs/sheet/index"
+    ],
+    "sets/piano-flow.js": [
+      "aurelia-framework",
+      "aurelia-event-aggregator",
+      "./game-controllers/piano-flow-gc"
+    ],
+    "sets/play-the-notes.js": [
+      "aurelia-framework",
+      "aurelia-event-aggregator",
+      "./game-controllers/play-the-notes-gc"
+    ],
+    "sets/recall-the-notes.js": [
+      "aurelia-framework",
+      "aurelia-event-aggregator",
+      "./game-controllers/recall-the-notes-gc"
+    ],
+    "users.js": [
+      "aurelia-framework",
+      "aurelia-fetch-client",
+      "fetch"
     ]
   }
 });

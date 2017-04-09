@@ -28,7 +28,9 @@ export class RecallTheNotesGC {
   round_time_divisor   = 0;
 
   constructor(selector){
-    this.sheet = new Sheet(selector);
+    this.sheet = new Sheet({
+      selector:     selector
+    });
     this.updateInterval = setInterval(this.udpate.bind(this), 50);
   }
 

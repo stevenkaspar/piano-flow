@@ -21,7 +21,9 @@ export class PlayTheNotesGC {
   round_time_remaining = this.round_time;
 
   constructor(selector){
-    this.sheet = new Sheet(selector);
+    this.sheet = new Sheet({
+      selector:     selector
+    });
     this.updateInterval = setInterval(this.udpate.bind(this), 50);
   }
 

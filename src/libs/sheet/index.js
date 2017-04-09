@@ -223,14 +223,16 @@ class Note {
 }
 
 export class Sheet {
-  context      = null;
-  stave        = null;
-  width        = 600;
-  height       = 100;
-  remove_point = 0;
-  VF           = Vex.Flow;
-  drawn_notes  = [];
-  flowInterval = null;
+  context             = null;
+  stave               = null;
+  width               = 600;
+  height              = 100;
+  remove_point        = 0;
+  VF                  = Vex.Flow;
+  drawn_notes         = [];
+  last_animation_time = null;
+  speed               = 0;
+  animation_requested = false;
 
   constructor(options){
 
@@ -245,11 +247,11 @@ export class Sheet {
     if(options.remove_point){
       this.remove_point = options.remove_point;
     }
-    this.noteRemovedCb = (typeof options.noteRemoved === 'function')?options.noteRemoved:()=>{};
+    this.noteRemovedCb = (typeof options.noteRemoved === 'function')?options.noteRemoved:()=>{};    
   }
 
   dispose(){
-    this.clearFlowInterval();
+    this.speed = 0;
   }
 
   createSheet(){
@@ -320,37 +322,42 @@ export class Sheet {
   }
 
   flowLeft(speed){
-    this.speed = speed;
-
-    this.clearFlowInterval();
-
-    this.flowInterval = setInterval(this.updateLocationsInFlow.bind(this), 5000 / this.speed);
-  }
-
-  clearFlowInterval(){
-    if(this.flowInterval){
-      clearInterval(this.flowInterval);
+    if(!this.animation_requested){
+      this.animation_requested = true;
+      window.requestAnimationFrame(this.step.bind(this));
     }
+    this.speed = -speed;
   }
-  updateLocationsInFlow(){
-    
-    for(let note of this.drawn_notes){
-      if(note.removed){
-        continue;
-      }
 
-      note.moveXPixels(-1);
+  step = (timestamp) => {
+		var time_diff = timestamp - this.last_step_time;
     
-      if(note.isXOrLessFromLeft(this.remove_point)){
-        note.remove();
+    this.last_step_time = timestamp;
+		
+		for(let note of this.drawn_notes){
+			if(note.removed){
+				continue;
+			}
+
+			let x = (time_diff * this.speed) / 1500;
+
+			note.moveXPixels( x );
+			
+			if(note.isXOrLessFromLeft(this.remove_point)){
+				note.remove();
         this.noteRemovedCb(note);
-      }
-    }
+			}
 
+		}
+
+		if(this.speed !== 0){
+      window.requestAnimationFrame(this.step.bind(this));
+    }
+		    
   }
 
   stopFlow(){
-    this.clearFlowInterval();
+    this.speed = 0;
   }
 
   /**
@@ -396,4 +403,5 @@ export class Sheet {
     line.setAttributeNS(null, 'stroke-width', `10`); 
     this.context.svg.appendChild(line);
   }
+
 }
