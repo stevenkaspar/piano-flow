@@ -1,30 +1,30 @@
 <template>
   <div class='d-flex flex-row keyboard-container'>
     <div class='flex-grow-1'>
-      <button class='white-key' mousedown.delegate='playKey($event, "c/4")'>c</button>
-      <button class='black-key black-key-right' mousedown.delegate='playKey($event, "c#/4")'>c#</button>
+      <button class='white-key' touchstart.delegate='keyTouchstart($event, "c/4")'>c</button>
+      <button class='black-key black-key-right' touchstart.delegate='keyTouchstart($event, "c#/4")'>c#</button>
     </div>
     <div class='flex-grow-1'>
-      <button class='white-key' mousedown.delegate='playKey($event, "d/4")'>d</button>
-      <button class='black-key black-key-right' mousedown.delegate='playKey($event, "d#/4")'>d#</button>
+      <button class='white-key' touchstart.delegate='keyTouchstart($event, "d/4")'>d</button>
+      <button class='black-key black-key-right' touchstart.delegate='keyTouchstart($event, "d#/4")'>d#</button>
     </div>
     <div class='flex-grow-1'>
-      <button class='white-key' mousedown.delegate='playKey($event, "e/4")'>e</button>
+      <button class='white-key' touchstart.delegate='keyTouchstart($event, "e/4")'>e</button>
     </div>
     <div class='flex-grow-1'>
-      <button class='white-key' mousedown.delegate='playKey($event, "f/4")'>f</button>
-      <button class='black-key black-key-right' mousedown.delegate='playKey($event, "f#/4")'>f#</button>
+      <button class='white-key' touchstart.delegate='keyTouchstart($event, "f/4")'>f</button>
+      <button class='black-key black-key-right' touchstart.delegate='keyTouchstart($event, "f#/4")'>f#</button>
     </div>
     <div class='flex-grow-1'>
-      <button class='white-key' mousedown.delegate='playKey($event, "g/4")'>g</button>
-      <button class='black-key black-key-right' mousedown.delegate='playKey($event, "g#/4")'>g#</button>
+      <button class='white-key' touchstart.delegate='keyTouchstart($event, "g/4")'>g</button>
+      <button class='black-key black-key-right' touchstart.delegate='keyTouchstart($event, "g#/4")'>g#</button>
     </div>
     <div class='flex-grow-1'>
-      <button class='white-key' mousedown.delegate='playKey($event, "a/4")'>a</button>
-      <button class='black-key black-key-right' mousedown.delegate='playKey($event, "a#/4")'>a#</button>
+      <button class='white-key' touchstart.delegate='keyTouchstart($event, "a/4")'>a</button>
+      <button class='black-key black-key-right' touchstart.delegate='keyTouchstart($event, "a#/4")'>a#</button>
     </div>
     <div class='flex-grow-1'>
-      <button class='white-key' mousedown.delegate='playKey($event, "b/4")' mousedown.delegate='playKey($event, "b#/4")'>b</button>
+      <button class='white-key' touchstart.delegate='keyTouchstart($event, "b/4")'>b</button>
     </div>
   </div>
 </template>

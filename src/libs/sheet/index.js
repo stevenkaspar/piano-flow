@@ -339,7 +339,7 @@ export class Sheet {
 				continue;
 			}
 
-			let x = (time_diff * this.speed) / 1500;
+			let x = (time_diff * this.speed) / 2000;
 
 			note.moveXPixels( x );
 			
@@ -360,11 +360,8 @@ export class Sheet {
     this.speed = 0;
   }
 
-  /**
-   * Returns a random quarter note in the x/4 range
-   */
-  getRandomNote(){
-    var _keys = [
+  getRandomKeyArray(){
+    const _keys = [
       'c/4',
       // 'c#/4',
       'd/4',
@@ -378,6 +375,23 @@ export class Sheet {
       // 'a#/4',
       'b/4',
     ];
+    var return_keys = [];
+    let num_keys = random(1, 2);
+    while(return_keys.length < num_keys){
+
+      let new_key = _keys[ random(0, _keys.length - 1) ];
+
+      if(return_keys.indexOf(new_key) === -1){
+        return_keys.push(new_key);
+      }
+    }
+    return return_keys;
+  }
+
+  /**
+   * Returns a random quarter note in the x/4 range
+   */
+  getRandomNote(){
     var _durations = [
       'q'
     ];
@@ -385,12 +399,12 @@ export class Sheet {
       'treble'
     ]
     
-    var key      = _keys[     random(0, _keys.length      - 1)];
+    var keys      = this.getRandomKeyArray();
     var duration = _durations[random(0, _durations.length - 1)];
     var clef   = _clefs[      random(0, _clefs.length     - 1)];
 
     return new Note({
-      keys:     [key],
+      keys:     keys,
       clef:     clef,
       duration: duration
     })

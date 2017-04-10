@@ -12,11 +12,14 @@ export class PlayTheNotesGC {
   played_notes    = [];
   correct_notes   = [];
   incorrect_notes = [];
+  keys_played_for_note = [];
   updateInterval  = null;
+  multikeyTimeout = null;
   // below here should be configurable
-  round_time      = 10000;
-  num_rounds      = 2;
-  possible_notes  = 4;
+  multitouch_window_ms = 750;
+  round_time           = 10000;
+  num_rounds           = 2;
+  possible_notes       = 4;
   // states to track in updateInterval
   round_time_remaining = this.round_time;
 
@@ -37,6 +40,11 @@ export class PlayTheNotesGC {
     }
     else {
       this.round_time_remaining = this.round_time;
+    }
+
+    // check if end of round
+    if(this.played_notes.length >= this.possible_notes && this.in_round){
+      this.endRound();
     }
   }
 
@@ -111,35 +119,76 @@ export class PlayTheNotesGC {
       
   }
   playKey(key){
-    var StaveNote = this.getNextStaveNote();
-    this.played_notes.push(key);
-
     if(this.paused){
       return;
     }
+    // only push if unique
+    if(this.keys_played_for_note.indexOf(key) === -1){
+      this.keys_played_for_note.push(key);
+    }
+    
+    let Note = this.getNextNote();
 
-    if(this.isCorrectKey(key, StaveNote)){
-      this.correct_notes.push(key);
-      $(StaveNote.attrs.el).removeClass('note-red');
-      $(StaveNote.attrs.el).addClass('note-green');
+    if(this.keys_played_for_note.length < Note.StaveNote.getKeys().length){
+      this.multikeyTimeout = setTimeout(this.isWrongMultikey.bind(this), this.multitouch_window_ms);
+      return;
+    }
+
+    clearTimeout(this.multikeyTimeout);
+
+    if(this.keysPlayedMatchStaveNoteKeys(Note.StaveNote)){
+      this.setNextNoteRight(key);
     }
     else {
-      this.incorrect_notes.push(key);
-      $(StaveNote.attrs.el).removeClass('note-green');
-      $(StaveNote.attrs.el).addClass('note-red');
+      this.setNextNoteWrong(key);
     }
-    // check if end of round
-    if(this.played_notes.length >= this.possible_notes){
-      this.endRound();
-    }
+    
   }
-  getNextStaveNote(){
+
+  isWrongMultikey(){
+    this.setNextNoteWrong();
+  }
+
+  setNextNoteRight(key){
+    if(!key){
+      key = 'PLACEHOLD';
+    }
+    let Note = this.getNextNote();
+    this.correct_notes.push(key);
+    $(Note.StaveNote.attrs.el).removeClass('note-red');
+    $(Note.StaveNote.attrs.el).addClass('note-green');
+    this.played_notes.push(key);
+    this.keys_played_for_note = [];
+  }
+
+  setNextNoteWrong(key){
+    if(!key){
+      key = 'PLACEHOLD';
+    }
+    let Note = this.getNextNote();
+    this.incorrect_notes.push(key);
+    $(Note.StaveNote.attrs.el).removeClass('note-green');
+    $(Note.StaveNote.attrs.el).addClass('note-red');
+
+    this.played_notes.push(key);
+    this.keys_played_for_note = [];
+  }
+
+  keysPlayedMatchStaveNoteKeys(StaveNote){
+    let correct_keys = StaveNote.getKeys();
+    for(let key of this.keys_played_for_note){
+      if(correct_keys.indexOf(key) === -1){
+        return false;
+      }
+    }
+    return true;
+  }
+  
+  getNextNote(){
     var index = this.played_notes.length;
-    return this.sheet.getDrawnNotes()[index].StaveNote;
+    return this.sheet.getDrawnNotes()[index];
   }
-  isCorrectKey(key, StaveNote){
-    return StaveNote.getKeys().indexOf(key) > -1;
-  }
+  
   calculateRoundResult(){
     
     var correct   = this.correct_notes.length;

@@ -1,5 +1,7 @@
 import {inject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
+import find   from 'lodash.find';
+import uid    from 'lodash.uniqueid';
 
 class Sound {
   key  = '';
@@ -66,26 +68,98 @@ class Sound {
   }
 }
 
+class KeyPress {
+  _id     = uid('keypress_');
+  created = new Date();
+  active_time = 200;
+
+  constructor(props){
+    this.key = props.key;
+    /**touch identifier */
+    this.tid      = props.tid;
+    this.active   = true;
+
+    // play sound
+    let sound = new Sound(props.ac, props.key);
+    sound.play();
+
+    // set timeout to go active = false
+    setTimeout(this.deactivate.bind(this), this.active_time);
+  }
+
+  deactivate(){
+    this.active = false;
+  }
+  
+}
+
 @inject(EventAggregator)
 export class Keyboard {
 
-  ac = new AudioContext();
+  ac             = new AudioContext();
+  pressed_keys   = [];
+  updateInterval = null;
 
   activate(model){}
+
   detached(){
     setTimeout(this.close.bind(this), 1000);
+    clearInterval(this.updateInterval);
   }
+
   constructor(ea){
     this.ea = ea;
+    
+    this.updateInterval = setInterval(this.update.bind(this), 50);
   }
+  
   close(){
     this.ac.close();
   }
-  playKey($event, key){
 
-    var sound = new Sound(this.ac, key);
+  update(){
+    this.removeInactive();
+  }
 
-    sound.play();
+  removeInactive(){
+    var i = this.pressed_keys.length;
+    // remove inactive KeyPresses
+    while(i--){
+      let KeyPress = this.pressed_keys[i]; 
+      if(!KeyPress.active){
+        this.pressed_keys.splice(i, 1);
+      }
+    }
+  }
+
+  keyTouchstart($event, key){
+    // console.log($event, key);
+
+    this.removeInactive();
+
+    // if a KeyPress with this key already exists then stop
+    let existing = find(this.pressed_keys, n => n.key === key);
+    
+    if(existing){
+      // console.log(`duplicate key ${key}`);
+      return;
+    }
+
+    // create KeyPress
+    let KP = new KeyPress({
+      tid: $event.targetTouches[0].identifier,
+      ac:  this.ac,
+      key: key
+    });
+    
+    this.pressed_keys.push(KP);
+
+    this.playKey(KP.key);
+  }
+
+  playKey(key){
+
+    // console.log(`playKey ${key}`);
 
     this.ea.publish('play-key', [
       key

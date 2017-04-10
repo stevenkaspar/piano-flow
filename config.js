@@ -25,6 +25,8 @@ System.config({
     "bootstrap": "github:twbs/bootstrap@3.3.7",
     "fetch": "github:github/fetch@1.0.0",
     "font-awesome": "npm:font-awesome@4.6.3",
+    "hammer-touchemulator": "npm:hammer-touchemulator@0.0.2",
+    "hammerjs": "npm:hammerjs@2.0.8",
     "jquery": "npm:jquery@2.2.4",
     "lodash": "npm:lodash@4.17.4",
     "lodash.find": "npm:lodash.find@4.6.0",
@@ -198,6 +200,9 @@ System.config({
     },
     "npm:font-awesome@4.6.3": {
       "css": "github:systemjs/plugin-css@0.1.31"
+    },
+    "npm:hammerjs@2.0.8": {
+      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:inherits@2.0.1": {
       "util": "github:jspm/nodelibs-util@0.1.0"
@@ -384,7 +389,9 @@ System.config({
     ],
     "sets/compose-views/keyboard.js": [
       "aurelia-framework",
-      "aurelia-event-aggregator"
+      "aurelia-event-aggregator",
+      "lodash.find",
+      "lodash.uniqueid"
     ],
     "sets/game-controllers/piano-flow-gc.js": [
       "../../libs/sheet/index",
