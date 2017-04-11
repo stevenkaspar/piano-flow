@@ -2,86 +2,23 @@ import {inject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import find   from 'lodash.find';
 import uid    from 'lodash.uniqueid';
+import {Piano} from '../../libs/synth';
 
-class Sound {
-  key  = '';
-  final_source = null;
-  source_nodes = [];
-
-  constructor(context, key){
-    this.context = context;
-    this.key     = key;
-
-    // create this.sine_node
-    this.createSineWave();
-    // create this.filter_node
-    this.createFilter();
-    // create this.gain_node
-    this.createGain(this.filter_node);
-
-    this.final_source = this.gain_node;
-
-    var self = this;
-    this.source_nodes.map(function(node){
-      node.start(0);
-    })
-  }
-  createSineWave(){
-    this.sine_node = this.context.createOscillator();
-    this.sine_node.type = 'sine';
-    this.sine_node.frequency.value = key_frequencies[this.key];
-    this.source_nodes.push(this.sine_node);
-  }
-  createFilter(){
-    this.filter_node                 = this.context.createBiquadFilter();
-    this.filter_node.type            = "lowpass";
-    this.filter_node.frequency.value = 200;
-    var self = this;
-    this.source_nodes.map(function(node){
-      node.connect( self.filter_node);
-    })
-  }
-
-  createGain(connector){
-    this.gain_node = this.context.createGain();
-    this.gain_node.gain.value = 1;
-    connector.connect(this.gain_node);
-  }
-
-  play(intensity){
-    if(typeof intensity === 'undefined'){
-      intensity = 100;
-    }
-    this.gain_node.connect(this.context.destination);
-
-    setTimeout(this.stop.bind(this), intensity);
-
-  }
-  stop(){
-    this.gain_node.gain.exponentialRampToValueAtTime(
-      0.00001, this.context.currentTime + 1
-    )
-    setTimeout(this.disconnect.bind(this), 1000);
-  }
-  disconnect(){
-    this.gain_node.disconnect();
-  }
-}
 
 class KeyPress {
   _id     = uid('keypress_');
   created = new Date();
   active_time = 200;
 
-  constructor(props){
+  constructor(instrument, props){
+    this.parentInstrument = instrument;
     this.key = props.key;
     /**touch identifier */
     this.tid      = props.tid;
     this.active   = true;
 
     // play sound
-    let sound = new Sound(props.ac, props.key);
-    sound.play();
+    this.parentInstrument.playKey(props.key, 1);
 
     // set timeout to go active = false
     setTimeout(this.deactivate.bind(this), this.active_time);
@@ -99,6 +36,7 @@ export class Keyboard {
   ac             = new AudioContext();
   pressed_keys   = [];
   updateInterval = null;
+  piano = new Piano();
 
   activate(model){}
 
@@ -146,7 +84,7 @@ export class Keyboard {
     }
 
     // create KeyPress
-    let KP = new KeyPress({
+    let KP = new KeyPress(this.piano, {
       tid: $event.targetTouches[0].identifier,
       ac:  this.ac,
       key: key
