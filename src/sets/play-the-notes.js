@@ -1,19 +1,18 @@
 import {inject} from 'aurelia-framework';
-import {EventAggregator} from 'aurelia-event-aggregator';
 import {PlayTheNotesGC} from './game-controllers/play-the-notes-gc';
+import {Keyboard} from './compose-views/keyboard';
 
-@inject(EventAggregator)
 export class PlayTheNotes {
   instructions = 'play the notes';
   subscribers = [];
+  keyboard = new Keyboard();
 
-  constructor(ea){
-    this.ea = ea;
+  constructor(){
   }
 
   attached(){
     
-    this.game = new PlayTheNotesGC('sheet');
+    this.game = new PlayTheNotesGC('sheet', this.keyboard);
 
     this.game.drawSheet();
 
@@ -25,14 +24,6 @@ export class PlayTheNotes {
   }
 
   listen(on_off){
-    if(on_off){
-      this.subscribers.push(this.ea.subscribe('play-key', this.playKeySubscriber.bind(this)));
-    }
-    else {
-      for(let subscriber of this.subscribers){
-        subscriber.dispose();
-      }
-    }
   }
 
   startGame(){

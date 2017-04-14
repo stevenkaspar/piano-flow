@@ -6080,7 +6080,25 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
   right: 0;
   bottom: 0;
   background: #444;
+  opacity: 1;
   z-index: 2; }
+  .absolute-full-cover span {
+    color: rgba(255, 255, 255, 0.75); }
+
+.absolute {
+  position: absolute; }
+
+.top {
+  top: 0; }
+
+.right {
+  right: 0; }
+
+.bottom {
+  bottom: 0; }
+
+.left {
+  left: 0; }
 
 .round-timer-bar-container {
   position: relative;

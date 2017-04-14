@@ -1,19 +1,18 @@
 import {inject} from 'aurelia-framework';
-import {EventAggregator} from 'aurelia-event-aggregator';
 import {PianoFlowGC} from './game-controllers/piano-flow-gc';
+import {Keyboard} from './compose-views/keyboard';
 
-@inject(EventAggregator)
 export class PlayTheNotes {
   instructions = 'play the notes';
   subscribers = [];
+  keyboard = new Keyboard();
 
-  constructor(ea){
-    this.ea = ea;
+  constructor(){
   }
 
   attached(){
     
-    this.game = new PianoFlowGC('sheet');
+    this.game = new PianoFlowGC('sheet', this.keyboard);
 
     this.game.drawSheet();
 
@@ -26,14 +25,6 @@ export class PlayTheNotes {
   }
 
   listen(on_off){
-    if(on_off){
-      this.subscribers.push(this.ea.subscribe('play-key', this.playKeySubscriber.bind(this)));
-    }
-    else {
-      for(let subscriber of this.subscribers){
-        subscriber.dispose();
-      }
-    }
   }
 
   startGame(){

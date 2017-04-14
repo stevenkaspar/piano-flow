@@ -1,30 +1,86 @@
 <template>
   <div class='d-flex flex-row keyboard-container'>
     <div class='flex-grow-1'>
-      <button class='white-key' touchstart.delegate='keyTouchstart($event, "c/4")'>c</button>
-      <button class='black-key black-key-right' touchstart.delegate='keyTouchstart($event, "c#/4")'>c#</button>
+
+      <button class='white-key' 
+      keyboard-key='c/4'
+      touchstart.delegate='keyboard.keyTouchstart($event, "c/4")' 
+      touchmove.delegate='keyboard.keyTouchmove($event, "c/4")' 
+      touchend.delegate='keyboard.keyTouchend($event, "c/4")'>c</button>
+
+      <button class='black-key black-key-right'  
+      keyboard-key='c#/4'
+      touchstart.delegate='keyboard.keyTouchstart($event, "c#/4")' 
+      touchmove.delegate='keyboard.keyTouchmove($event, "c#/4")' 
+      touchend.delegate='keyboard.keyTouchend($event, "c#/4")'>c#</button>
+
     </div>
     <div class='flex-grow-1'>
-      <button class='white-key' touchstart.delegate='keyTouchstart($event, "d/4")'>d</button>
-      <button class='black-key black-key-right' touchstart.delegate='keyTouchstart($event, "d#/4")'>d#</button>
+      <button class='white-key' 
+      keyboard-key='d/4'
+      touchstart.delegate='keyboard.keyTouchstart($event, "d/4")' 
+      touchmove.delegate='keyboard.keyTouchmove($event, "d/4")' 
+      touchend.delegate='keyboard.keyTouchend($event, "d/4")'>d</button>
+
+      <button class='black-key black-key-right'  
+      keyboard-key='d#/4'
+      touchstart.delegate='keyboard.keyTouchstart($event, "d#/4")' 
+      touchmove.delegate='keyboard.keyTouchmove($event, "d#/4")' 
+      touchend.delegate='keyboard.keyTouchend($event, "d#/4")'>d#</button>
     </div>
     <div class='flex-grow-1'>
-      <button class='white-key' touchstart.delegate='keyTouchstart($event, "e/4")'>e</button>
+      <button class='white-key' 
+      keyboard-key='e/4'
+      touchstart.delegate='keyboard.keyTouchstart($event, "e/4")' 
+      touchmove.delegate='keyboard.keyTouchmove($event, "e/4")' 
+      touchend.delegate='keyboard.keyTouchend($event, "e/4")'>e</button>
     </div>
     <div class='flex-grow-1'>
-      <button class='white-key' touchstart.delegate='keyTouchstart($event, "f/4")'>f</button>
-      <button class='black-key black-key-right' touchstart.delegate='keyTouchstart($event, "f#/4")'>f#</button>
+      <button class='white-key' 
+      keyboard-key='f/4'
+      touchstart.delegate='keyboard.keyTouchstart($event, "f/4")' 
+      touchmove.delegate='keyboard.keyTouchmove($event, "f/4")' 
+      touchend.delegate='keyboard.keyTouchend($event, "f/4")'>f</button>
+
+      <button class='black-key black-key-right'  
+      keyboard-key='f#/4'
+      touchstart.delegate='keyboard.keyTouchstart($event, "f#/4")' 
+      touchmove.delegate='keyboard.keyTouchmove($event, "f#/4")' 
+      touchend.delegate='keyboard.keyTouchend($event, "f#/4")'>f#</button>
     </div>
     <div class='flex-grow-1'>
-      <button class='white-key' touchstart.delegate='keyTouchstart($event, "g/4")'>g</button>
-      <button class='black-key black-key-right' touchstart.delegate='keyTouchstart($event, "g#/4")'>g#</button>
+      <button class='white-key' 
+      keyboard-key='g/4'
+      touchstart.delegate='keyboard.keyTouchstart($event, "g/4")' 
+      touchmove.delegate='keyboard.keyTouchmove($event, "g/4")' 
+      touchend.delegate='keyboard.keyTouchend($event, "g/4")'>g</button>
+
+      <button class='black-key black-key-right'  
+      keyboard-key='g#/4'
+      touchstart.delegate='keyboard.keyTouchstart($event, "g#/4")' 
+      touchmove.delegate='keyboard.keyTouchmove($event, "g#/4")' 
+      touchend.delegate='keyboard.keyTouchend($event, "g#/4")'>g#</button>
     </div>
     <div class='flex-grow-1'>
-      <button class='white-key' touchstart.delegate='keyTouchstart($event, "a/4")'>a</button>
-      <button class='black-key black-key-right' touchstart.delegate='keyTouchstart($event, "a#/4")'>a#</button>
+      <button class='white-key' 
+      keyboard-key='a/4'
+      touchstart.delegate='keyboard.keyTouchstart($event, "a/4")' 
+      touchmove.delegate='keyboard.keyTouchmove($event, "a/4")' 
+      touchend.delegate='keyboard.keyTouchend($event, "a/4")'>a</button>
+
+      <button class='black-key black-key-right' 
+      keyboard-key='a#/4'
+      touchstart.delegate='keyboard.keyTouchstart($event, "a#/4")' 
+      touchmove.delegate='keyboard.keyTouchmove($event, "a#/4")' 
+      touchend.delegate='keyboard.keyTouchend($event, "a#/4")'>a#</button>
     </div>
     <div class='flex-grow-1'>
-      <button class='white-key' touchstart.delegate='keyTouchstart($event, "b/4")'>b</button>
+      <button class='white-key' 
+      keyboard-key='b/4'
+      touchstart.delegate='keyboard.keyTouchstart($event, "b/4")' 
+      touchmove.delegate='keyboard.keyTouchmove($event, "b/4")' 
+      touchend.delegate='keyboard.keyTouchend($event, "b/4")'>b</button>
+
     </div>
   </div>
 </template>

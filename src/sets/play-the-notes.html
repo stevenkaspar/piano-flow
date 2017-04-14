@@ -26,7 +26,7 @@
     </div>
     <div class='flex-grow-1 overflow-y-auto position-relative' style='min-height: 150px' if.bind='game.in_game && game.in_round && (!game.paused || true)'>
       <div class='absolute-full'>
-        <compose view-model='./compose-views/keyboard.js' view='./compose-views/keyboard.html'></compose>
+        <compose model.bind='keyboard' view='./compose-views/keyboard.html'></compose>
       </div>
     </div>
     <div class='flex-grow-1 overflow-y-auto position-relative' if.bind='!game.in_game && game.round_results.length'>

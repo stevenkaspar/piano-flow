@@ -31,10 +31,14 @@
     <div class='flex-grow-1 overflow-y-auto position-relative' style='min-height: 150px' if.bind='game.in_game && game.in_round && (!game.paused || true)'>
 
       <div class='absolute-full'>
-        <compose view-model='./compose-views/keyboard.js' view='./compose-views/keyboard.html'></compose>
+        <compose model.bind='keyboard' view='./compose-views/keyboard.html'></compose>
       </div>
 
-      <div class='absolute-full-cover' if.bind='!game.showing_board'></div>
+      <div class='absolute-full-cover' if.bind='!game.showing_board' click.delegate='game.showBoard()'>
+        <span class='absolute bottom right p-1'>
+          tap to start&nbsp;<i class='fa fa-long-arrow-right'></i> 
+        </span>
+      </div>
 
     </div>
     <div class='flex-grow-1 overflow-y-auto position-relative' if.bind='!game.in_game && game.round_results.length'>

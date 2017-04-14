@@ -270,18 +270,18 @@ System.config({
     ],
     "sets/piano-flow.js": [
       "aurelia-framework",
-      "aurelia-event-aggregator",
-      "./game-controllers/piano-flow-gc"
+      "./game-controllers/piano-flow-gc",
+      "./compose-views/keyboard"
     ],
     "sets/play-the-notes.js": [
       "aurelia-framework",
-      "aurelia-event-aggregator",
-      "./game-controllers/play-the-notes-gc"
+      "./game-controllers/play-the-notes-gc",
+      "./compose-views/keyboard"
     ],
     "sets/recall-the-notes.js": [
       "aurelia-framework",
-      "aurelia-event-aggregator",
-      "./game-controllers/recall-the-notes-gc"
+      "./game-controllers/recall-the-notes-gc",
+      "./compose-views/keyboard"
     ],
     "users.js": [
       "aurelia-framework",

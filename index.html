@@ -27,5 +27,45 @@
     <script>
       System.import('aurelia-bootstrapper');
     </script>
+
+  <script>
+  var mapping = {
+    a: 'c/4',
+    w: 'c#/4',
+    s: 'd/4',
+    e: 'd#/4',
+    d: 'e/4',
+    f: 'f/4',
+    t: 'f#/4',
+    g: 'g/4',
+    y: 'g#/4',
+    h: 'a/4',
+    u: 'a#/4',
+    j: 'b/4'
+  };
+  var handleKeyDown = function(e){
+    var key = e.key;
+    var e = document.createEvent('TouchEvent');
+    e.initUIEvent("touchstart", true, true);
+    var button = document.querySelector('[keyboard-key="'+mapping[key]+'"]');
+    if(!button){
+      return;
+    }
+    button.dispatchEvent(e);
+  }
+  var handleKeyUp = function(e){
+    var key = e.key;
+    var e = document.createEvent('TouchEvent');
+    e.initUIEvent("touchend", true, true);
+    var button = document.querySelector('[keyboard-key="'+mapping[key]+'"]');
+    if(!button){
+      return;
+    }
+    button.dispatchEvent(e);
+  }
+
+  document.addEventListener('keydown', handleKeyDown);
+  document.addEventListener('keyup',   handleKeyUp);
+  </script>
   </body>
 </html>

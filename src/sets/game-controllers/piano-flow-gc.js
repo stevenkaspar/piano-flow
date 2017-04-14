@@ -11,7 +11,7 @@ export class PianoFlowGC {
   performance_level = 100;
   updateInterval  = null;
   target_offset   = 115;
-  flow_speed      = 120;
+  flow_speed      = 80;
   cur_add_new_note_interval_ms = 0;
   update_interval_ms           = 50;
   lowest_level_time            = 4000;
@@ -21,13 +21,31 @@ export class PianoFlowGC {
   // states to track in updateInterval
   new_note_interval_ms = this.lowest_level_time / this.level;
 
-  constructor(selector){
+  constructor(selector, keyboard){
     this.sheet = new Sheet({
-      selector:     selector,
-      remove_point: this.target_offset - 30
+      selector:    selector,
+      removePoint: this.removePoint.bind(this)
     });
+    
+    this.keyboard = keyboard;
+    this.keyboard.on('keypress', this.checkPressedKeys, this);
     this.updateInterval = setInterval(this.udpate.bind(this), this.update_interval_ms);
   }
+
+  targetOffset(){
+    let actual_sheet_width = this.sheet.context.svg.clientWidth;
+    let multiplier = actual_sheet_width / this.sheet.width;
+    
+    return (this.target_offset * multiplier);
+  }
+
+  removePoint(){
+    let actual_sheet_width = this.sheet.context.svg.clientWidth;
+    let multiplier = actual_sheet_width / this.sheet.width;
+
+    return (this.target_offset - 40) * multiplier;
+  }
+
   dispose(){
     if(this.updateInterval){
       clearInterval(this.updateInterval);
@@ -134,12 +152,19 @@ export class PianoFlowGC {
       new_note.setOffsetX(500);
     }
   }
-  playKey(key){
-
-    if(this.paused){
+  checkPressedKeys(){
+    
+    if(this.paused || !this.in_game){
       return;
     }
+    
     let Note    = this.getNextNote();
+    let pressed_keys = this.keyboard.getPressedKeys();
+    
+    if(pressed_keys.length !== Note.StaveNote.getKeys().length){
+      return;
+    }
+
     let note_xy = Note.getXY();
     let time = this.getTimeOfNextNote();
     // if note is in timezone
@@ -149,7 +174,7 @@ export class PianoFlowGC {
       this.played_notes.push(Note);
 
       // if correct
-      if(this.isCorrectKey(key, Note)){
+      if(this.pressedKeysMatchStaveNoteKeys(pressed_keys, Note.StaveNote)){
         // increment performance indicator
         Note.style('green');
         this.performance_level += 1;
@@ -177,8 +202,14 @@ export class PianoFlowGC {
     return this.sheet.getDrawnNotes()[index];
   }
 
-  isCorrectKey(key, Note){
-    return Note.StaveNote.getKeys().indexOf(key) > -1;
+  pressedKeysMatchStaveNoteKeys(pressed_keys, StaveNote){
+    let correct_keys = StaveNote.getKeys();
+    for(let key of pressed_keys.map(pk => pk.key)){
+      if(correct_keys.indexOf(key) === -1){
+        return false;
+      }
+    }
+    return true;
   }
 
   /**
@@ -193,8 +224,8 @@ export class PianoFlowGC {
     let note_xy = Note.getXY();
 
     // if note note passed
-    let not_passed = note_xy.x > this.target_offset - 14;
-    let been_here  = note_xy.x < this.target_offset + 10;
+    let not_passed = note_xy.x > this.targetOffset() - 14;
+    let been_here  = note_xy.x < this.targetOffset() + 10;
 
     // been here and passed - too early
     if(!been_here){

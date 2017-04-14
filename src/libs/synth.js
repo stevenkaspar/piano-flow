@@ -18,7 +18,7 @@ class SynthInstrument {
    * @param {integer} duration
    */
   playKey(key, duration){
-    console.log(key);
+    
   	let split  = key.split('/');
     let note   = split[0];
     let octave = parseInt(split[1]);

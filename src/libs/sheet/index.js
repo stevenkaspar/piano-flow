@@ -54,7 +54,16 @@ class Note {
 
     this.StaveNote = new this.VF.StaveNote(this.options);
 
+    this.addDecoratorsToStaveNote();
+
     return this;
+  }
+  addDecoratorsToStaveNote(){
+    for(let i = 0, l = this.options.keys.length; i < l; i++){
+      if(this.options.keys[i].match(/#/g)){
+        this.StaveNote.addAccidental(i, new this.VF.Accidental("#"));
+      }
+    }
   }
   /**
    * removes the SVG elements
@@ -63,23 +72,12 @@ class Note {
     if(this.removed){
       return this;
     }
-    var note = $(this.StaveNote.attrs.el);
-    var bar = this.getBar();
-    // remove line that go though the stave
-    bar.remove();
-    note.remove();
+    var elems = this.getElem(true);
+    elems.remove();
+
     this.removed = true;
-    return this;
-  }
-
-  updateLocationInFlow(){
-
-    this.moveXPixels(-1);
     
-    if(this.isXOrLessFromLeft()){
-      this.remove();
-    }
-
+    return this;
   }
 
   /**
@@ -154,8 +152,19 @@ class Note {
         return_jquery = return_jquery.add(bar);
       }
     }
-
     return return_jquery;
+  }
+  /**
+   * returns just the <g class='vf-note'>
+   */
+  getVFNote(){
+    return $(this.StaveNote.attrs.el).find('g.vf-note');
+  }
+  /**
+   * returns just the <g class='vf-note'>
+   */
+  getModifiers(){
+    return $(this.StaveNote.attrs.el).find('g.vf-modifiers');
   }
   /**
    * returns the <rect> before the StaveNote.attrs.el
@@ -170,12 +179,12 @@ class Note {
    * actually width of the svg 
    * @param {integer} x - number of pixels to test against 
    */
-  isXOrLessFromLeft(x){
+  isXOrLessFromLeft(x, node){
     if(isNaN(x)){
       x = 0;
     }
     
-    let pixels_from_left = this.getXY().x;
+    let pixels_from_left = this.getXY(node).x;
     
     if(pixels_from_left < x){
       return true;
@@ -191,7 +200,7 @@ class Note {
       }
     }
     if(!node){
-      node = this.getElem();
+      node = this.getVFNote();
     }
     let svg = this.getSvg();
     let xy = {
@@ -227,7 +236,7 @@ export class Sheet {
   stave               = null;
   width               = 600;
   height              = 100;
-  remove_point        = 0;
+  removePoint         = null;
   VF                  = Vex.Flow;
   drawn_notes         = [];
   last_animation_time = null;
@@ -244,8 +253,11 @@ export class Sheet {
     if(options.height){
       this.height = options.height;
     }
-    if(options.remove_point){
-      this.remove_point = options.remove_point;
+    if(options.removePoint){
+      this.removePoint = options.removePoint;
+    }
+    else {
+      this.removePoint = ()=>0;
     }
     this.noteRemovedCb = (typeof options.noteRemoved === 'function')?options.noteRemoved:()=>{};    
   }
@@ -273,8 +285,8 @@ export class Sheet {
     // Connect it to the rendering context and draw!
     this.stave.setContext(this.context).draw();
 
-    sheet_elem.find('svg')[0].setAttribute('width', '100%');
-    sheet_elem.find('svg')[0].setAttribute('viewBox', '0 0 ' + this.width + ' ' + this.height);
+    this.context.svg.setAttribute('width', '100%');
+    this.context.svg.setAttribute('viewBox', '0 0 ' + this.width + ' ' + this.height);
   }
 
   getDrawnNotes(){
@@ -324,6 +336,7 @@ export class Sheet {
   flowLeft(speed){
     if(!this.animation_requested){
       this.animation_requested = true;
+      this.last_step_time = performance.now();
       window.requestAnimationFrame(this.step.bind(this));
     }
     this.speed = -speed;
@@ -343,7 +356,7 @@ export class Sheet {
 
 			note.moveXPixels( x );
 			
-			if(note.isXOrLessFromLeft(this.remove_point)){
+			if(note.isXOrLessFromLeft(this.removePoint(), note.getElem())){
 				note.remove();
         this.noteRemovedCb(note);
 			}
@@ -352,6 +365,9 @@ export class Sheet {
 
 		if(this.speed !== 0){
       window.requestAnimationFrame(this.step.bind(this));
+    }
+    else {
+      this.animation_requested = false;
     }
 		    
   }
@@ -363,16 +379,16 @@ export class Sheet {
   getRandomKeyArray(){
     const _keys = [
       'c/4',
-      // 'c#/4',
+      'c#/4',
       'd/4',
-      // 'd#/4',
+      'd#/4',
       'e/4',
       'f/4',
-      // 'f#/4',
+      'f#/4',
       'g/4',
-      // 'g#/4',
+      'g#/4',
       'a/4',
-      // 'a#/4',
+      'a#/4',
       'b/4',
     ];
     var return_keys = [];
@@ -385,6 +401,12 @@ export class Sheet {
         return_keys.push(new_key);
       }
     }
+    /** 
+     * sort the keys in order to avoid issue
+     *  https://github.com/0xfe/vexflow/issues/104
+     */
+
+    return_keys.sort((a,b) => (_keys.indexOf(a) > _keys.indexOf(b))? 1 : -1 );
     return return_keys;
   }
 

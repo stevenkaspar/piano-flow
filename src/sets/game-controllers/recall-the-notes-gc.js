@@ -23,15 +23,24 @@ export class RecallTheNotesGC {
   incorrect_notes = [];
   updateInterval  = null;
 
+  key_has_been_pressed_for_note = {
+    yes: false,
+    time: null
+  };
+  keypress_mercy_window = 500;
+
   // states to track in updateInterval
   round_time_remaining = 0;
   round_time_divisor   = 0;
 
-  constructor(selector){
+  constructor(selector, keyboard){
     this.sheet = new Sheet({
       selector:     selector
     });
-    this.updateInterval = setInterval(this.udpate.bind(this), 50);
+    
+    this.keyboard = keyboard;
+    this.keyboard.on('keypress', this.checkPressedKeys, this);
+    this.updateInterval = setInterval(this.udpate.bind(this), 10);
   }
 
   udpate(){
@@ -44,10 +53,20 @@ export class RecallTheNotesGC {
         this.round_time_remaining = this.pause_time_left;
       }
       this.round_time_divisor = this.cur_step_end - this.cur_step_start;
+
+      // check if end of round
+      if(this.played_notes.length >= this.possible_notes){
+        this.endRound();
+      }
     }
     else {
       this.round_time_remaining = this.round_time_divisor = 1;
     }
+
+    if(this.showing_board){
+      this.checkPressedKeys();
+    }
+    
 
   }
 
@@ -144,41 +163,96 @@ export class RecallTheNotesGC {
     this.showing_sheet = true;
     this.showing_board = true;
 
+    this.keyboard.deactivateAllKeys();
+
     this.round_results.push(this.calculateRoundResult());
     
     this.stepTimeout = setTimeout(this.nextRound.bind(this), this.bt_round_time);
       
   }
-  playKey(key){
-    var StaveNote = this.getNextStaveNote();
-    this.played_notes.push(key);
+  checkPressedKeys(){
 
-    if(this.paused){
+    if(this.paused || this.showing_sheet){
+      return;
+    }
+    
+    let Note = this.getNextNote();
+    let pressed_keys = this.keyboard.getPressedKeys();
+    
+    let cutoff_time = this.key_has_been_pressed_for_note.time + this.keypress_mercy_window;
+    
+    if(pressed_keys.length >= Note.StaveNote.getKeys().length){
+      
+      if(this.pressedKeysMatchStaveNoteKeys(pressed_keys, Note.StaveNote)){
+        this.setNextNoteRight(Note.StaveNote.getKeys());
+      }
+      else {
+        this.setNextNoteWrong(Note.StaveNote.getKeys());
+      }
+
+      this.key_has_been_pressed_for_note = {
+        yes: false,
+        time: null
+      };
+      this.keyboard.deactivateAllKeys();
+
+    }
+    else if(this.key_has_been_pressed_for_note.yes && (new Date().getTime() > cutoff_time)){
+
+      this.key_has_been_pressed_for_note = {
+        yes: false,
+        time: null
+      };
+      this.keyboard.deactivateAllKeys();
+
+      this.setNextNoteWrong(Note.StaveNote.getKeys());
+
       return;
     }
 
-    if(this.isCorrectKey(key, StaveNote)){
-      this.correct_notes.push(key);
-      $(StaveNote.attrs.el).removeClass('note-red');
-      $(StaveNote.attrs.el).addClass('note-green');
+    else if(pressed_keys.length > 0 && !this.key_has_been_pressed_for_note.yes){
+      this.key_has_been_pressed_for_note = {
+        yes: true,
+        time: new Date().getTime()
+      };
     }
-    else {
-      this.incorrect_notes.push(key);
-      $(StaveNote.attrs.el).removeClass('note-green');
-      $(StaveNote.attrs.el).addClass('note-red');
-    }
-    // check if end of round
-    if(this.played_notes.length >= this.possible_notes){
-      this.endRound();
-    }
+    
   }
-  getNextStaveNote(){
+  setNextNoteRight(key){
+    if(!key){
+      key = 'PLACEHOLD';
+    }
+    let Note = this.getNextNote();
+    this.correct_notes.push(key);
+    Note.style('green');
+    this.played_notes.push(key);
+  }
+
+  setNextNoteWrong(key){
+    if(!key){
+      key = 'PLACEHOLD';
+    }
+    let Note = this.getNextNote();
+    this.incorrect_notes.push(key);
+    Note.style('red');
+    this.played_notes.push(key);
+  }
+  
+  pressedKeysMatchStaveNoteKeys(pressed_keys, StaveNote){
+    let correct_keys = StaveNote.getKeys();
+    for(let key of pressed_keys.map(pk => pk.key)){
+      if(correct_keys.indexOf(key) === -1){
+        return false;
+      }
+    }
+    return true;
+  }
+
+  getNextNote(){
     var index = this.played_notes.length;
-    return this.sheet.getDrawnNotes()[index].StaveNote;
+    return this.sheet.getDrawnNotes()[index];
   }
-  isCorrectKey(key, StaveNote){
-    return StaveNote.getKeys().indexOf(key) > -1;
-  }
+
   calculateRoundResult(){
     
     var correct   = this.correct_notes.length;

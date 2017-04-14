@@ -12,7 +12,6 @@ export class PlayTheNotesGC {
   played_notes    = [];
   correct_notes   = [];
   incorrect_notes = [];
-  keys_played_for_note = [];
   updateInterval  = null;
   multikeyTimeout = null;
   // below here should be configurable
@@ -23,15 +22,18 @@ export class PlayTheNotesGC {
   // states to track in updateInterval
   round_time_remaining = this.round_time;
 
-  constructor(selector){
+  constructor(selector, keyboard){
     this.sheet = new Sheet({
       selector:     selector
     });
-    this.updateInterval = setInterval(this.udpate.bind(this), 50);
+    
+    this.keyboard = keyboard;
+    this.keyboard.on('keypress', this.checkPressedKeys, this);
+    this.updateInterval = setInterval(this.udpate.bind(this), 10);
   }
 
   udpate(){
-    // run updates that should be calculated every 50ms
+    // run updates that should be calculated every 10ms
     if(this.in_round && !this.paused){
       this.round_time_remaining = this.cur_round_end - new Date().getTime();
     }
@@ -118,35 +120,30 @@ export class PlayTheNotesGC {
     this.stepTimeout = setTimeout(this.nextRound.bind(this), this.bt_round_time);
       
   }
-  playKey(key){
-    if(this.paused){
+  checkPressedKeys(){
+    
+    if(this.paused || !this.in_game || !this.in_round){
       return;
-    }
-    // only push if unique
-    if(this.keys_played_for_note.indexOf(key) === -1){
-      this.keys_played_for_note.push(key);
     }
     
     let Note = this.getNextNote();
-
-    if(this.keys_played_for_note.length < Note.StaveNote.getKeys().length){
-      this.multikeyTimeout = setTimeout(this.isWrongMultikey.bind(this), this.multitouch_window_ms);
+    let pressed_keys = this.keyboard.getPressedKeys();
+    
+    if(pressed_keys.length !== Note.StaveNote.getKeys().length){
       return;
     }
 
-    clearTimeout(this.multikeyTimeout);
-
-    if(this.keysPlayedMatchStaveNoteKeys(Note.StaveNote)){
-      this.setNextNoteRight(key);
+    if(this.pressedKeysMatchStaveNoteKeys(pressed_keys, Note.StaveNote)){
+      this.setNextNoteRight(Note.StaveNote.getKeys());
     }
     else {
-      this.setNextNoteWrong(key);
+      this.setNextNoteWrong(Note.StaveNote.getKeys());
+    }
+
+    for(let pk of pressed_keys){
+      pk.active = false;
     }
     
-  }
-
-  isWrongMultikey(){
-    this.setNextNoteWrong();
   }
 
   setNextNoteRight(key){
@@ -155,10 +152,8 @@ export class PlayTheNotesGC {
     }
     let Note = this.getNextNote();
     this.correct_notes.push(key);
-    $(Note.StaveNote.attrs.el).removeClass('note-red');
-    $(Note.StaveNote.attrs.el).addClass('note-green');
+    Note.style('green');
     this.played_notes.push(key);
-    this.keys_played_for_note = [];
   }
 
   setNextNoteWrong(key){
@@ -167,16 +162,13 @@ export class PlayTheNotesGC {
     }
     let Note = this.getNextNote();
     this.incorrect_notes.push(key);
-    $(Note.StaveNote.attrs.el).removeClass('note-green');
-    $(Note.StaveNote.attrs.el).addClass('note-red');
-
+    Note.style('red');
     this.played_notes.push(key);
-    this.keys_played_for_note = [];
   }
 
-  keysPlayedMatchStaveNoteKeys(StaveNote){
+  pressedKeysMatchStaveNoteKeys(pressed_keys, StaveNote){
     let correct_keys = StaveNote.getKeys();
-    for(let key of this.keys_played_for_note){
+    for(let key of pressed_keys.map(pk => pk.key)){
       if(correct_keys.indexOf(key) === -1){
         return false;
       }
